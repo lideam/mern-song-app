@@ -45,7 +45,7 @@ mern-song-app/
 
 - Express.js
 - MongoDB + Mongoose
-- Dockerized (with `docker-compose.yml`)
+- Backend is fully Dockerized (with `docker-compose.yml`)
 
 ---
 
@@ -56,7 +56,7 @@ mern-song-app/
 - Song statistics dashboard
 - Filter songs by genre
 - Styled using **Emotion + Styled System**
-- Fully Dockerized setup
+- Backend is fully Dockerized for local setup
 
 ---
 
@@ -90,10 +90,20 @@ cd mern-song-app
 docker-compose up --build
 ```
 
-Then open:
+This will start:
+- **Backend API** → [http://localhost:5000](http://localhost:5000)
+- **MongoDB** → running inside Docker
 
-- Frontend → [http://localhost:3000](http://localhost:3000)
-- Backend → [http://localhost:5000](http://localhost:5000)
+Now, start the frontend:
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+Frontend will be running at:  
+👉 [http://localhost:3000](http://localhost:3000)
 
 ---
 
@@ -200,5 +210,5 @@ For **Addis Software Full Stack Developer Test Project**
 ## ⭐ Notes for Reviewers
 
 - Both **frontend and backend are deployed** (Vercel + Render).
-- Project is **fully Dockerized** for easy local setup.
+- **Backend is fully Dockerized** for easy local setup.
 - Filtering by **genre** is included as a bonus feature.
