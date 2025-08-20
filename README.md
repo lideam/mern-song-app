@@ -39,7 +39,7 @@ mern-song-app/
 
 - React + TypeScript
 - Redux Toolkit & Redux-Saga
-- **Emotion + Styled System (for styling across all components)**
+- Emotion + Styled System
 
 **Backend**
 
@@ -66,10 +66,6 @@ mern-song-app/
 
 ![Landing Page](./screenshots/landing.png)
 
-### Add New Song
-
-![Add Song](./screenshots/add-song.png)
-
 ### Song List with Filters
 
 ![Song List](./screenshots/song-list.png)
@@ -77,6 +73,10 @@ mern-song-app/
 ### Music Stats Dashboard
 
 ![Stats](./screenshots/stats.png)
+
+### Add New Song
+
+![Add Song](./screenshots/add-song.png)
 
 ---
 
@@ -91,6 +91,7 @@ docker-compose up --build
 ```
 
 This will start:
+
 - **Backend API** → [http://localhost:5000](http://localhost:5000)
 - **MongoDB** → running inside Docker
 
@@ -126,7 +127,17 @@ npm install
 Create **`.env`** inside `backend/`:
 
 ```env
-MONGO_URI=mongodb+srv://<your-uri>
+# ==== MongoDB Connection ====
+# Local option (Docker)
+# MONGO_URI=mongodb://mongo:27017/mern_songs
+
+# Local option (without Docker, just Mongo installed locally)
+# MONGO_URI=mongodb://localhost:27017/mern_songs
+
+# Atlas (default for cloud deployment)
+MONGO_URI=mongodb+srv://lidetuamare:1tgwyVmgtvdGlNO2@cluster0.9wgx3dj.mongodb.net/mern_songs?retryWrites=true&w=majority&appName=Cluster0
+
+# ==== Server Port ====
 PORT=5000
 ```
 
@@ -199,7 +210,7 @@ For **Addis Software Full Stack Developer Test Project**
 
 ## ⭐ Notes for Reviewers
 
-- Frontend **now uses Emotion + Styled System** for styling (per feedback).  
-- Both **frontend and backend are deployed** (Vercel + Render).  
-- **Backend is fully Dockerized** for easy local setup.  
-- Filtering by **genre** and **real-time stats dashboard** are included.
+- Both **frontend and backend are deployed** (Vercel + Render).
+- **Backend is fully Dockerized** for easy local setup.
+- Filtering by **genre** is included as a bonus feature.
+- **Frontend styling is now fully implemented using Emotion + Styled System** (per feedback request).
