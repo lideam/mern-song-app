@@ -13,10 +13,10 @@ import {
   IconButton,
   Paper,
   Typography,
-  Box,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Box from "../../theme/Box";
 
 interface Props {
   onEdit: (id: string) => void;
@@ -48,16 +48,14 @@ const SongList: React.FC<Props> = ({ onEdit }) => {
 
   return (
     <Box
-      sx={{
-        minHeight: "100vh",
-        py: 8,
-        px: 4,
-        background: "#111",
-        color: "white",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
+      minHeight="100vh"
+      py={4}
+      px={4}
+      bg="#111"
+      color="white"
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
     >
       <Typography variant="h3" fontWeight="bold" gutterBottom>
         🎵 Your Songs
@@ -89,21 +87,16 @@ const SongList: React.FC<Props> = ({ onEdit }) => {
                   background: "linear-gradient(90deg, #1DB954, #1ed760)",
                 }}
               >
-                <TableCell sx={{ color: "black", fontWeight: "bold" }}>
-                  Title
-                </TableCell>
-                <TableCell sx={{ color: "black", fontWeight: "bold" }}>
-                  Artist
-                </TableCell>
-                <TableCell sx={{ color: "black", fontWeight: "bold" }}>
-                  Album
-                </TableCell>
-                <TableCell sx={{ color: "black", fontWeight: "bold" }}>
-                  Genre
-                </TableCell>
-                <TableCell sx={{ color: "black", fontWeight: "bold" }}>
-                  Actions
-                </TableCell>
+                {["Title", "Artist", "Album", "Genre", "Actions"].map(
+                  (header) => (
+                    <TableCell
+                      key={header}
+                      sx={{ color: "black", fontWeight: "bold" }}
+                    >
+                      {header}
+                    </TableCell>
+                  )
+                )}
               </TableRow>
             </TableHead>
             <TableBody>

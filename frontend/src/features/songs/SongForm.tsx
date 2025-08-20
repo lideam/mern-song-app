@@ -2,16 +2,96 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../app/store";
 import { addSong, updateSong } from "./SongSlice";
-import {
-  TextField,
-  Button,
-  Paper,
-  Stack,
-  Typography,
-  Box,
-} from "@mui/material";
 import { Song, NewSong } from "../../types/song";
+import styled from "@emotion/styled";
+import { space, layout, color, typography, flexbox } from "styled-system";
 
+//  Styled Components
+const PageWrapper = styled("div")(
+  {
+    minHeight: "100vh",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#121212",
+  },
+  space,
+  layout
+);
+
+const FormCard = styled("div")(
+  {
+    backgroundColor: "#181818",
+    borderRadius: "16px",
+    padding: "40px",
+    maxWidth: "500px",
+    width: "100%",
+    color: "white",
+    boxShadow: "0px 6px 20px rgba(0,0,0,0.4)",
+  },
+  layout,
+  space,
+  color
+);
+
+const Title = styled("h2")(
+  {
+    textAlign: "center",
+    fontWeight: "bold",
+    marginBottom: "24px",
+    color: "#1DB954",
+  },
+  typography
+);
+
+const Input = styled("input")(
+  {
+    width: "100%",
+    padding: "12px 16px",
+    borderRadius: "8px",
+    backgroundColor: "#222",
+    border: "1px solid #333",
+    color: "white",
+    fontSize: "16px",
+    transition: "border-color 0.2s ease-in-out",
+    outline: "none",
+    marginBottom: "20px",
+    "&:focus": {
+      borderColor: "#1DB954",
+    },
+    "&::placeholder": {
+      color: "#aaa",
+    },
+  },
+  space,
+  layout,
+  color,
+  typography
+);
+
+const Button = styled("button")(
+  {
+    width: "100%",
+    padding: "14px 18px",
+    borderRadius: "8px",
+    fontWeight: "bold",
+    fontSize: "16px",
+    cursor: "pointer",
+    border: "none",
+    backgroundColor: "#1DB954",
+    color: "#000",
+    transition: "background 0.3s ease-in-out",
+    "&:hover": {
+      backgroundColor: "#1ed760",
+    },
+  },
+  layout,
+  space,
+  color,
+  typography
+);
+
+// Component
 interface SongFormProps {
   editId?: string;
   onFinish: () => void;
@@ -53,128 +133,42 @@ const SongForm: React.FC<SongFormProps> = ({ editId, onFinish }) => {
   };
 
   return (
-    <Box
-      id="addsong"
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#121212",
-        py: 8,
-      }}
-    >
-      <Paper
-        elevation={6}
-        sx={{
-          padding: 5,
-          borderRadius: 4,
-          backgroundColor: "#181818",
-          color: "white",
-          width: "100%",
-          maxWidth: 500,
-        }}
-      >
-        <Typography
-          variant="h4"
-          fontWeight="bold"
-          gutterBottom
-          align="center"
-          sx={{ color: "#1DB954" }}
-        >
-          {editId ? "✏️ Edit Song" : "➕ Add New Song"}
-        </Typography>
+    <PageWrapper py={6}>
+      <FormCard>
+        <Title>{editId ? "✏️ Edit Song" : "➕ Add New Song"}</Title>
 
-        <Stack spacing={3} sx={{ mt: 2 }}>
-          <TextField
-            label="Title"
+        <form>
+          <Input
             name="title"
+            placeholder="Title"
             value={form.title}
             onChange={handleChange}
-            fullWidth
-            InputLabelProps={{ style: { color: "#aaa" } }}
-            InputProps={{
-              style: { color: "white" },
-            }}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": { borderColor: "#333" },
-                "&:hover fieldset": { borderColor: "#1DB954" },
-                "&.Mui-focused fieldset": { borderColor: "#1DB954" },
-              },
-            }}
           />
-          <TextField
-            label="Artist"
+          <Input
             name="artist"
+            placeholder="Artist"
             value={form.artist}
             onChange={handleChange}
-            fullWidth
-            InputLabelProps={{ style: { color: "#aaa" } }}
-            InputProps={{
-              style: { color: "white" },
-            }}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": { borderColor: "#333" },
-                "&:hover fieldset": { borderColor: "#1DB954" },
-                "&.Mui-focused fieldset": { borderColor: "#1DB954" },
-              },
-            }}
           />
-          <TextField
-            label="Album"
+          <Input
             name="album"
+            placeholder="Album"
             value={form.album}
             onChange={handleChange}
-            fullWidth
-            InputLabelProps={{ style: { color: "#aaa" } }}
-            InputProps={{
-              style: { color: "white" },
-            }}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": { borderColor: "#333" },
-                "&:hover fieldset": { borderColor: "#1DB954" },
-                "&.Mui-focused fieldset": { borderColor: "#1DB954" },
-              },
-            }}
           />
-          <TextField
-            label="Genre"
+          <Input
             name="genre"
+            placeholder="Genre"
             value={form.genre}
             onChange={handleChange}
-            fullWidth
-            InputLabelProps={{ style: { color: "#aaa" } }}
-            InputProps={{
-              style: { color: "white" },
-            }}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": { borderColor: "#333" },
-                "&:hover fieldset": { borderColor: "#1DB954" },
-                "&.Mui-focused fieldset": { borderColor: "#1DB954" },
-              },
-            }}
           />
 
-          <Button
-            variant="contained"
-            size="large"
-            onClick={handleSubmit}
-            sx={{
-              backgroundColor: "#1DB954",
-              color: "#000",
-              fontWeight: "bold",
-              "&:hover": { backgroundColor: "#1ed760" },
-            }}
-          >
+          <Button type="button" onClick={handleSubmit}>
             {editId ? "Update Song" : "Add Song"}
           </Button>
-        </Stack>
-      </Paper>
-    </Box>
+        </form>
+      </FormCard>
+    </PageWrapper>
   );
 };
 

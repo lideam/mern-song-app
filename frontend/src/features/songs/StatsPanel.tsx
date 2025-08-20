@@ -2,14 +2,8 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../app/store";
 import { fetchStats } from "./SongSlice";
-import {
-  Paper,
-  Typography,
-  Stack,
-  Box,
-  Card,
-  CardContent,
-} from "@mui/material";
+import styled from "@emotion/styled";
+import { space, layout, color, typography, flexbox } from "styled-system";
 import {
   BarChart,
   Bar,
@@ -19,6 +13,82 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+//  Styled Components
+const PageWrapper = styled("div")(
+  {
+    minHeight: "100vh",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#121212",
+  },
+  space,
+  layout
+);
+
+const Panel = styled("div")(
+  {
+    backgroundColor: "#181818",
+    borderRadius: "20px",
+    padding: "40px",
+    maxWidth: "900px",
+    width: "100%",
+    color: "white",
+    boxShadow: "0px 6px 20px rgba(0,0,0,0.4)",
+  },
+  space,
+  layout
+);
+
+const Title = styled("h2")(
+  {
+    textAlign: "center",
+    fontFamily: "'Orbitron', sans-serif",
+    marginBottom: "30px",
+  },
+  typography
+);
+
+const FlexWrap = styled("div")(
+  {
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    gap: "16px",
+  },
+  flexbox,
+  space
+);
+
+const StatCard = styled("div")(
+  {
+    backgroundColor: "#222",
+    borderRadius: "16px",
+    textAlign: "center",
+    flex: "1 1 200px",
+    padding: "20px",
+  },
+  layout,
+  space
+);
+
+const StatValue = styled("div")({
+  fontSize: "2.5rem",
+  fontWeight: "bold",
+  color: "#1DB954",
+  fontFamily: "'Orbitron', sans-serif",
+});
+
+const StatLabel = styled("div")({
+  marginTop: "8px",
+  textTransform: "uppercase",
+  fontFamily: "'Rajdhani', sans-serif",
+  letterSpacing: "1px",
+  fontSize: "14px",
+  opacity: 0.9,
+});
+
+// Component
 const StatsPanel: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { stats, loading, error } = useSelector(
@@ -30,171 +100,62 @@ const StatsPanel: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <Box
-      id="stats"
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#121212",
-        py: 8,
-        px: 2,
-      }}
-    >
-      <Paper
-        elevation={6}
-        sx={{
-          padding: 5,
-          borderRadius: 4,
-          backgroundColor: "#181818",
-          color: "white",
-          width: "100%",
-          maxWidth: 900,
-        }}
-      >
-        <Typography
-          variant="h4"
-          fontWeight="bold"
-          gutterBottom
-          align="center"
-          sx={{ fontFamily: "'Orbitron', sans-serif", mb: 4 }}
-        >
-          📊 Music Stats
-        </Typography>
+    <PageWrapper py={5} px={3}>
+      <Panel>
+        <Title>📊 Music Stats</Title>
 
-        {loading && <Typography align="center">Loading stats...</Typography>}
-        {error && (
-          <Typography align="center" color="error">
-            {error}
-          </Typography>
-        )}
+        {loading && <p style={{ textAlign: "center" }}>Loading stats...</p>}
+        {error && <p style={{ textAlign: "center", color: "red" }}>{error}</p>}
 
         {stats && (
-          <Stack spacing={5}>
-            {/* Main counts in flex */}
-            <Box display="flex" flexWrap="wrap" gap={2} justifyContent="center">
+          <>
+            <FlexWrap>
               {[
                 { label: "Songs", value: stats.totalSongs },
                 { label: "Artists", value: stats.totalArtists },
                 { label: "Albums", value: stats.totalAlbums },
                 { label: "Genres", value: stats.totalGenres },
               ].map((item) => (
-                <Card
-                  key={item.label}
-                  sx={{
-                    flex: "1 1 200px",
-                    bgcolor: "#222",
-                    borderRadius: 3,
-                    textAlign: "center",
-                    p: 2,
-                  }}
-                >
-                  <CardContent>
-                    <Typography
-                      variant="h3"
-                      fontWeight="bold"
-                      sx={{
-                        color: "#1DB954",
-                        fontFamily: "'Orbitron', sans-serif",
-                      }}
-                    >
-                      {item.value}
-                    </Typography>
-                    <Typography
-                      variant="subtitle1"
-                      sx={{
-                        textTransform: "uppercase",
-                        fontFamily: "'Rajdhani', sans-serif",
-                        letterSpacing: 1,
-                        mt: 1,
-                      }}
-                    >
-                      {item.label}
-                    </Typography>
-                  </CardContent>
-                </Card>
+                <StatCard key={item.label}>
+                  <StatValue>{item.value}</StatValue>
+                  <StatLabel>{item.label}</StatLabel>
+                </StatCard>
               ))}
-            </Box>
+            </FlexWrap>
 
-            <Box display="flex" flexWrap="wrap" gap={2} justifyContent="center">
-              <Card
-                sx={{
-                  flex: "1 1 250px",
-                  bgcolor: "#222",
-                  borderRadius: 3,
+            <FlexWrap mt={4}>
+              <StatCard>
+                <div style={{ opacity: 0.7 }}>🎶 Top Genre</div>
+                <StatValue style={{ fontSize: "1.5rem" }}>
+                  {stats.topGenre || "N/A"}
+                </StatValue>
+              </StatCard>
+
+              <StatCard>
+                <div style={{ opacity: 0.7 }}>👤 Top Artist</div>
+                <StatValue style={{ fontSize: "1.5rem" }}>
+                  {stats.topArtist || "N/A"}
+                </StatValue>
+              </StatCard>
+
+              <StatCard>
+                <div style={{ opacity: 0.7 }}>📈 Avg Songs per Artist</div>
+                <StatValue style={{ fontSize: "1.5rem" }}>
+                  {stats.avgSongsPerArtist || "0"}
+                </StatValue>
+              </StatCard>
+            </FlexWrap>
+
+            <div style={{ height: 300, marginTop: "40px" }}>
+              <h3
+                style={{
                   textAlign: "center",
+                  fontFamily: "'Rajdhani', sans-serif",
+                  marginBottom: "12px",
                 }}
-              >
-                <CardContent>
-                  <Typography variant="subtitle2" sx={{ opacity: 0.7 }}>
-                    🎶 Top Genre
-                  </Typography>
-                  <Typography
-                    variant="h5"
-                    fontWeight="bold"
-                    sx={{ color: "#1DB954", mt: 1 }}
-                  >
-                    {stats.topGenre || "N/A"}
-                  </Typography>
-                </CardContent>
-              </Card>
-
-              <Card
-                sx={{
-                  flex: "1 1 250px",
-                  bgcolor: "#222",
-                  borderRadius: 3,
-                  textAlign: "center",
-                }}
-              >
-                <CardContent>
-                  <Typography variant="subtitle2" sx={{ opacity: 0.7 }}>
-                    👤 Top Artist
-                  </Typography>
-                  <Typography
-                    variant="h5"
-                    fontWeight="bold"
-                    sx={{ color: "#1DB954", mt: 1 }}
-                  >
-                    {stats.topArtist || "N/A"}
-                  </Typography>
-                </CardContent>
-              </Card>
-
-              <Card
-                sx={{
-                  flex: "1 1 250px",
-                  bgcolor: "#222",
-                  borderRadius: 3,
-                  textAlign: "center",
-                }}
-              >
-                <CardContent>
-                  <Typography variant="subtitle2" sx={{ opacity: 0.7 }}>
-                    📈 Avg Songs per Artist
-                  </Typography>
-                  <Typography
-                    variant="h5"
-                    fontWeight="bold"
-                    sx={{ color: "#1DB954", mt: 1 }}
-                  >
-                    {stats.avgSongsPerArtist || "0"}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Box>
-
-            <Box sx={{ height: 300, mt: 4 }}>
-              <Typography
-                variant="h6"
-                fontWeight="bold"
-                align="center"
-                gutterBottom
-                sx={{ fontFamily: "'Rajdhani', sans-serif" }}
               >
                 Songs by Genre
-              </Typography>
+              </h3>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={stats.songsByGenre}>
                   <XAxis dataKey="_id" stroke="#aaa" />
@@ -203,11 +164,11 @@ const StatsPanel: React.FC = () => {
                   <Bar dataKey="count" fill="#1DB954" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
-            </Box>
-          </Stack>
+            </div>
+          </>
         )}
-      </Paper>
-    </Box>
+      </Panel>
+    </PageWrapper>
   );
 };
 

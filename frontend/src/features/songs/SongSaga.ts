@@ -17,7 +17,6 @@ import API_BASE_URL from "../../config";
 
 const SONGS_URL = `${API_BASE_URL}/songs`;
 
-// Worker Sagas
 function* fetchSongsWorker() {
   try {
     const { data } = yield call(axios.get, SONGS_URL);
@@ -66,7 +65,6 @@ function* deleteSongWorker(action: PayloadAction<string>) {
   }
 }
 
-// Root Saga
 export default function* rootSaga() {
   yield all([
     takeLatest(fetchSongs.type, fetchSongsWorker),

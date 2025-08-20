@@ -2,9 +2,59 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../app/store";
 import { setFilterGenre, setSearchQuery } from "../features/songs/SongSlice";
-import { TextField, Chip, Stack, Box, InputAdornment } from "@mui/material";
+import { Stack } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import styled from "@emotion/styled";
+import { space, layout } from "styled-system";
 
+//  Styled Components
+const Container = styled("div")(space, layout, {
+  textAlign: "center",
+  margin: "0 auto",
+});
+
+const StyledInput = styled("input")({
+  width: "100%",
+  maxWidth: "900px",
+  padding: "14px 20px 14px 50px",
+  borderRadius: "30px",
+  backgroundColor: "#222",
+  border: "none",
+  outline: "none",
+  color: "white",
+  fontSize: "16px",
+});
+
+const SearchWrapper = styled("div")({
+  position: "relative",
+  display: "inline-block",
+  width: "100%",
+  maxWidth: "900px",
+});
+
+const SearchIconWrapper = styled("div")({
+  position: "absolute",
+  top: "50%",
+  left: "15px",
+  transform: "translateY(-50%)",
+  color: "#1DB954",
+});
+
+const GenreChip = styled("div")<{ active?: boolean }>(({ active }) => ({
+  padding: "6px 16px",
+  borderRadius: "20px",
+  fontSize: "14px",
+  cursor: "pointer",
+  margin: "5px",
+  backgroundColor: active ? "#1DB954" : "#333",
+  color: "white",
+  transition: "0.2s",
+  "&:hover": {
+    backgroundColor: active ? "#1ed760" : "#1DB954aa",
+  },
+}));
+
+//  Component
 const FilterBar: React.FC = () => {
   const dispatch = useDispatch();
   const { list, filterGenre, searchQuery } = useSelector(
@@ -16,68 +66,45 @@ const FilterBar: React.FC = () => {
   );
 
   return (
-    <Box
-      sx={{
-        width: "100%",
-        maxWidth: "900px",
-        mt: 6,
-        textAlign: "center",
-      }}
-    >
-      <TextField
-        variant="outlined"
-        placeholder="Search songs, artists, or albums..."
-        value={searchQuery}
-        onChange={(e) => dispatch(setSearchQuery(e.target.value))}
-        fullWidth
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon sx={{ color: "#1DB954" }} />
-            </InputAdornment>
-          ),
-          sx: {
-            borderRadius: "30px",
-            bgcolor: "#222",
-            color: "white",
-            "& fieldset": { border: "none" },
-          },
-        }}
-        sx={{
-          input: { color: "white" },
-        }}
-      />
+    <Container width="100%" maxWidth="900px" mt={8}>
+      {/* Search Input */}
+      <SearchWrapper>
+        <SearchIconWrapper>
+          <SearchIcon />
+        </SearchIconWrapper>
+        <StyledInput
+          type="text"
+          placeholder="Search songs, artists, or albums..."
+          value={searchQuery}
+          onChange={(e) => dispatch(setSearchQuery(e.target.value))}
+        />
+      </SearchWrapper>
 
+      {/* Genre Chips */}
       <Stack
         direction="row"
         spacing={1}
         justifyContent="center"
         flexWrap="wrap"
-        mt={3}
+        mt={4}
       >
-        <Chip
-          label="All"
+        <GenreChip
+          active={filterGenre === ""}
           onClick={() => dispatch(setFilterGenre(""))}
-          color={filterGenre === "" ? "success" : "default"}
-          sx={{
-            bgcolor: filterGenre === "" ? "#1DB954" : "#333",
-            color: "white",
-          }}
-        />
+        >
+          All
+        </GenreChip>
         {genres.map((genre) => (
-          <Chip
+          <GenreChip
             key={genre}
-            label={genre.charAt(0).toUpperCase() + genre.slice(1)}
+            active={filterGenre === genre}
             onClick={() => dispatch(setFilterGenre(genre))}
-            sx={{
-              bgcolor: filterGenre === genre ? "#1DB954" : "#333",
-              color: "white",
-              "&:hover": { bgcolor: "#1DB954aa" },
-            }}
-          />
+          >
+            {genre.charAt(0).toUpperCase() + genre.slice(1)}
+          </GenreChip>
         ))}
       </Stack>
-    </Box>
+    </Container>
   );
 };
 
